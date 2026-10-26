@@ -72,3 +72,15 @@ def largest_rental(rentals: list) -> str:
             first_rental = False
 
     return customer
+
+
+def format_rental_line(
+    customer: str, quote: float, deposit: bool, inspection: bool
+) -> str:
+    """Return one formatted rental report line."""
+    deposit_text = "yes" if deposit else "no"
+    inspection_text = "yes" if inspection else "no"
+    return (
+        f"{customer}: ${quote:.2f} | deposit: {deposit_text}"
+        f" | inspection: {inspection_text}"
+    )
