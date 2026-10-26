@@ -1,6 +1,7 @@
 from business_rules import calculate_rental_cost, get_rental_discount
 from business_rules import calculate_quote
 from business_rules import requires_deposit, needs_inspection
+from business_rules import total_quoted, largest_rental
 
 
 def test_rental_cost():
@@ -78,3 +79,35 @@ def test_inspection_at_quote_limit():
 
 def test_inspection_above_quote_limit():
     assert needs_inspection(5, 800.01) is True
+
+
+def test_total_quoted_short_list():
+    rentals = [
+        {"customer": "Ali", "daily_rate": 60.0, "days": 2, "contractor": False},
+        {"customer": "Sara", "daily_rate": 60.0, "days": 2, "contractor": True},
+    ]
+    assert round(total_quoted(rentals), 2) == 278.0
+
+
+def test_total_quoted_empty_list():
+    assert round(total_quoted([]), 2) == 0.0
+
+
+def test_largest_rental_short_list():
+    rentals = [
+        {"customer": "Ali", "daily_rate": 60.0, "days": 2, "contractor": False},
+        {"customer": "Sara", "daily_rate": 120.0, "days": 10, "contractor": False},
+    ]
+    assert largest_rental(rentals) == "Sara"
+
+
+def test_largest_rental_tie_returns_first():
+    rentals = [
+        {"customer": "Ali", "daily_rate": 60.0, "days": 2, "contractor": False},
+        {"customer": "Sara", "daily_rate": 60.0, "days": 2, "contractor": False},
+    ]
+    assert largest_rental(rentals) == "Ali"
+
+
+def test_largest_rental_empty_list():
+    assert largest_rental([]) == ""
