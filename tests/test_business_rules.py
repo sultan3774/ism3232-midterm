@@ -1,5 +1,6 @@
 from business_rules import calculate_rental_cost, get_rental_discount
 from business_rules import calculate_quote
+from business_rules import requires_deposit, needs_inspection
 
 
 def test_rental_cost():
@@ -53,3 +54,27 @@ def test_quote_uses_discounted_cost_for_waiver():
 
 def test_quote_with_long_rental_discount():
     assert round(calculate_quote(120.0, 10), 2) == 960.0
+
+
+def test_deposit_below_limit():
+    assert requires_deposit(999.99) is False
+
+
+def test_deposit_at_limit():
+    assert requires_deposit(1000.0) is True
+
+
+def test_inspection_below_days_limit():
+    assert needs_inspection(4, 900.0) is False
+
+
+def test_inspection_at_days_limit():
+    assert needs_inspection(5, 900.0) is True
+
+
+def test_inspection_at_quote_limit():
+    assert needs_inspection(5, 800.0) is False
+
+
+def test_inspection_above_quote_limit():
+    assert needs_inspection(5, 800.01) is True
